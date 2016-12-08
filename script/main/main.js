@@ -7,7 +7,9 @@ $(document).ready(
     $("#toggle").click(function () {
       $("#layersContent").toggle();
     });
-    var map = L.map('map').setView([39.88642, 116.37452], 18);
+    var map = L.map('map',{zoomControl:false}).setView([40.04166598, 116.37452], 14);
+
+    $('#myTab li:eq(0) a').tab('show');
 
     var layerController = new fastmap.mapApi.LayerController({ config: App.layersConfig });
 
@@ -18,27 +20,31 @@ $(document).ready(
 
     }
 
-    //var transform = new fastmap.mapApi.MecatorTranform();
 
     var animationLayer = null;
     var animationdataSet = null;
-      var options = {
-          fillStyle: 'rgba(255, 250, 250, 0.2)',
-          coordType: 'bd09mc',
-          globalCompositeOperation: "lighter",
-          size: 3,
-          animation: {
-              stepsRange: {
-                  start: 0,
-                  end: 150
-              },
-              trails: 5,
-              duration: 15,
-          },
-          draw: 'simple'
-      };
-      initBarChart("barChart");
-
+    var options = {
+      fillStyle: 'rgba(255, 250, 250, 0.2)',
+      coordType: 'bd09mc',
+      globalCompositeOperation: "lighter",
+      size: 3,
+      animation: {
+        stepsRange: {
+          start: 0,
+          end: 150
+        },
+        trails: 5,
+        duration: 15,
+      },
+      draw: 'simple',
+      zIndex:41,
+    }
+      //MS生成量专题图
+      initBarChart("guagechartcontainer");
+      mscountline("linechartcontainer");
+      // initBarChart("barChart1");
+      // initBarChart("barChart2");
+      // initBarChart("barChart3");
     $.get('data/beijing-link', function (rs) {
       var data = [];
       var timeData = [];
@@ -199,6 +205,84 @@ function initBarChart(id) {
     myChart.setOption(option, true);
   }
 }
+
+
+function mscountline(id) {
+
+
+  var dom = document.getElementById(id);
+  var myChart = echarts.init(dom);
+  var app = {};
+  option = null;
+  var base = +new Date(2014, 9, 3);
+  var oneDay = 24 * 3600 * 1000;
+  var date = [];
+
+  var data = [Math.random() * 150];
+  var now = new Date(base);
+
+  function addData(shift) {
+    now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
+    date.push(now);
+    data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
+
+    if (shift) {
+      date.shift();
+      data.shift();
+    }
+
+    now = new Date(+new Date(now) + oneDay);
+  }
+
+  for (var i = 1; i < 100; i++) {
+    addData();
+  }
+
+  option = {
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: date
+    },
+    yAxis: {
+      boundaryGap: [0, '50%'],
+      type: 'value'
+    },
+    series: [
+      {
+        name: '成交',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        stack: 'a',
+        areaStyle: {
+          normal: {}
+        },
+        data: data
+      }
+    ]
+  };
+
+  setInterval(function () {
+    addData(true);
+    myChart.setOption({
+      xAxis: {
+        data: date
+      },
+      series: [{
+        name: '成交',
+        data: data
+      }]
+    });
+  }, 500);
+  ;
+  if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+  }
+}
+
+
+
 function changeDivShow(type) {
     if(type === 'MS') {
         $('#msDiv').css('display', 'block');
@@ -208,4 +292,5 @@ function changeDivShow(type) {
         $('#nrDiv').css('display', 'block');
         initBarChart("barChartOfNR");
     }
+
 }
