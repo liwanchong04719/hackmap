@@ -3,7 +3,9 @@
 
 $(document).ready(
   function () {
-
+      $("#toggle").click(function() {
+          $("#layersContent").toggle();
+      });
     var map = L.map('map').setView([39.88642, 116.37452], 18);
 
     var layerController = new fastmap.mapApi.LayerController({config: App.layersConfig});
@@ -16,7 +18,10 @@ $(document).ready(
     createLayerList(layerController.layers);
     //图层点击事件
 
-    $('.layersContainer input[type="checkbox"]').change(function (e) {
+    $('#leftCheckBox input[type="checkbox"]').change(function (e) {
+      console.log('------------'+e)
+    })
+      $('#rightCheckBox input[type="checkbox"]').change(function (e) {
       console.log('------------'+e)
     })
 
@@ -27,10 +32,25 @@ $(document).ready(
 
 //生成图层列表
 function createLayerList(layers) {
-  var html = "";
+  var leftHtml = "";
+  var rightHtml = "";
   $.each(layers,function (index ,item) {
-      html+= '<div class="checkbox"> <label> <input type="checkbox" value="'+item.options.id+'">'+item.options.name+' </label> </div>'
+      if(index <= 3) {
+          leftHtml += '<div class="checkbox" style="padding-left: 9px">' +
+            '<label>' +
+            '<input type="checkbox" value="' + item.options.id + '">' + item.options.name + '' +
+            ' </label>' +
+            '</div>';
+      } else {
+          rightHtml = '<div class="checkbox" style="padding-left: 9px">' +
+            '<label>' +
+            '<input type="checkbox" value="' + item.options.id + '">' + item.options.name + '' +
+            ' </label>' +
+            '</div>';
+      }
+
   })
-$('.layersContainer').html(html);
+$('#leftCheckBox').html(leftHtml);
+$('#rightCheckBox').html(rightHtml);
 
 }
