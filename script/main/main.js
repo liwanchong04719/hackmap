@@ -9,7 +9,7 @@ $(document).ready(
       $("#layersContent").toggle();
     });
 
-    var map = L.map('map').setView([39.88642, 116.37452], 18);
+    var map = L.map('map',{zoomControl:false}).setView([40.04166598, 116.37452], 14);
 
     var layerController = new fastmap.mapApi.LayerController({config: App.layersConfig});
 
@@ -37,7 +37,8 @@ $(document).ready(
         trails: 5,
         duration: 15,
       },
-      draw: 'simple'
+      draw: 'simple',
+      zIndex:41,
     }
     $.get('data/beijing-link', function (rs) {
       var data = [];
