@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="node_modules/jquery/jquery-1.11.1.js"></script>
+    <script src="node_modules/jquery/2.1.1/jquery-2.1.1.js"></script>
+    <script src="node_modules/bootstrap-3.3.5/js/bootstrap.js"></script>
     <script src="node_modules/leaflet/dist/leaflet-src.js"></script>
     <script src="script/mapApi/Application.js"></script>
     <script src="script/mapApi/common/fastmap.js"></script>
@@ -128,6 +129,59 @@
                 <div id="dataDiv" style="height: 100%;">
                     <div class="leftTopDiv" id="showMap">
                         <a href="#map">地图实时</a>
+                    </div>
+                    <div class="row" style="height: 100%;margin-right: 0px;margin-left: 0px">
+                        <div class="col-md-9" style="height: 100%;margin-right: 0px;margin-left: 0px">
+                            <div style="height: 10%">
+                                <h3 style="text-align: center;">轨迹制作与成果挖掘</h3>
+                            </div>
+                            <div style="height: 90%">
+                                <ul id="myTab" class="nav nav-tabs">
+                                    <li class="active"><a href="#home" data-toggle="tab">
+                                        MS生成量</a>
+                                    </li>
+                                    <li><a href="#ios" data-toggle="tab">ADAS原始轨迹点数</a></li>
+                                    <li><a href="#jmeter" data-toggle="tab">滴滴订单数据</a></li>
+                                    <li><a href="#ejb" data-toggle="tab">sensor信息数</a></li>
+                                </ul>
+                                <div id="myTabContent" class="tab-content" style="height: 89%">
+                                    <div class="tab-pane fade in active" id="home" style="height: 100%">
+                                        <div style="height: 20%;border-bottom: 1px solid red;">
+
+                                        </div>
+                                        <div style="height: 80%">
+                                            <div class="row" style="height: 100%">
+                                                <div class="col-md-6" style="height: 50%;">
+                                                    <div id="barChart" style="height: 250px;width: 350px; left: 50px;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="height: 50%;">
+                                                    <div id="barChart1" style="height: 250px;width: 350px; left: 50px;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="height: 50%; ">
+                                                    <div id="barChart2" style="height: 250px;width: 350px; left: 50px;">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" style="height: 50%;">
+                                                    <div id="barChart3" style="height: 250px;width: 350px; left: 50px;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="ios">
+                                    </div>
+                                    <div class="tab-pane fade" id="jmeter">
+                                    </div>
+                                    <div class="tab-pane fade" id="ejb">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-3"></div>
                     </div>
                 </div>
             </div>
