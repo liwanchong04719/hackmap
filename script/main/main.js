@@ -7,12 +7,9 @@ $(document).ready(
     $("#toggle").click(function () {
       $("#layersContent").toggle();
     });
-
-
     var map = L.map('map',{zoomControl:false}).setView([40.04166598, 116.37452], 14);
 
     $('#myTab li:eq(0) a').tab('show');
-
 
     var layerController = new fastmap.mapApi.LayerController({ config: App.layersConfig });
 
@@ -49,6 +46,7 @@ $(document).ready(
       // initBarChart("barChart1");
       // initBarChart("barChart2");
       // initBarChart("barChart3");
+
 
     $.get('data/beijing-link', function (rs) {
       var data = [];
@@ -255,9 +253,9 @@ function mscountline(id) {
     },
     series: [
       {
-        name:'成交',
-        type:'line',
-        smooth:true,
+        name: '成交',
+        type: 'line',
+        smooth: true,
         symbol: 'none',
         stack: 'a',
         areaStyle: {
@@ -275,12 +273,26 @@ function mscountline(id) {
         data: date
       },
       series: [{
-        name:'成交',
+        name: '成交',
         data: data
       }]
     });
-  }, 500);;
+  }, 500);
+  ;
   if (option && typeof option === "object") {
     myChart.setOption(option, true);
   }
+}
+
+
+
+function changeDivShow(type) {
+    if(type === 'MS') {
+        $('#msDiv').css('display', 'block');
+        $('#nrDiv').css('display', 'none');
+    } else{
+        $('#msDiv').css('display', 'none');
+        $('#nrDiv').css('display', 'block');
+    }
+
 }

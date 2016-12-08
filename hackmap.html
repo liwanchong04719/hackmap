@@ -137,8 +137,15 @@
                         <div class="col-md-9" style="height: 100%;margin-right: 0px;margin-left: 0px">
                             <div style="height: 10%">
                                 <h3 style="text-align: center;">轨迹制作与成果挖掘</h3>
+                                <div class="btn-group" style="margin-left: 900px; margin-top: -30px">
+                                    <button onclick="changeDivShow('MS')" type="button" class="btn btn-default">MS</button>
+                                    <button onclick="changeDivShow('NS')" type="button" class="btn btn-default">NR</button>
+                                </div>
+
                             </div>
-                            <div style="height: 90%;width: 100%">
+
+                            <div id="msDiv" style="height: 90%">
+
                                 <ul id="myTab" class="nav nav-tabs">
                                     <li class="active"><a href="#home" data-toggle="tab">
                                         MS生成量</a>
@@ -147,33 +154,13 @@
                                     <li><a href="#jmeter" data-toggle="tab">滴滴订单数据</a></li>
                                     <li><a href="#ejb" data-toggle="tab">sensor信息数</a></li>
                                 </ul>
-                                <div id="myTabContent" class="tab-content" style="height: 89%;width: 100%">
-                                    <div class="tab-pane fade in active" id="home" style="height: 100%;width: 100%">
-                                        <div style="height: 20%;border-bottom: 1px solid red;">
 
-                                        </div>
-                                        <div style="height: 80%;width: 100%">
+                                <div id="myTabContent" class="tab-content" style="height: 89%">
+                                    <div class="tab-pane fade in active" id="home" style="height: 100%">
+                                        <div style="height: 100%" id="barChart">
 
-                                                <!--<div class="col-md-6" style="height: 50%;">-->
-                                                    <!--<div id="barChart" style="height: 250px;width: 350px; left: 50px;">-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<div class="col-md-6" style="height: 50%;">-->
-                                                    <!--<div id="barChart1" style="height: 250px;width: 350px; left: 50px;">-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<div class="col-md-6" style="height: 50%; ">-->
-                                                    <!--<div id="barChart2" style="height: 250px;width: 350px; left: 50px;">-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-                                                <!--<div class="col-md-6" style="height: 50%;">-->
-                                                    <!--<div id="barChart3" style="height: 250px;width: 350px; left: 50px;">-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
-
-                                                <div class="container" style="width: 100%; height: 60%" id="guagechartcontainer"></div>
-                                                <div class="container" style="width: 100%; height: 40%"  id="linechartcontainer"></div>
-
+                                            <div class="container" style="width: 100%; height: 60%" id="guagechartcontainer"></div>
+                                            <div class="container" style="width: 100%; height: 40%"  id="linechartcontainer"></div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="ios">
@@ -184,7 +171,28 @@
                                     </div>
                                 </div>
                             </div>
-
+                            <div id="nrDiv" style="height: 90%;display: none">
+                                <ul id="myTabOfNR" class="nav nav-tabs">
+                                    <li class="active"><a href="#quantityOfNR" data-toggle="tab">
+                                        NR生成量</a>
+                                    </li>
+                                    <li><a href="#segmentOfNR" data-toggle="tab">ADAS截取轨迹段数</a></li>
+                                    <li><a href="#digOfNR" data-toggle="tab">挖掘poi数</a></li>
+                                    <li><a href="#timeEventOfNR" data-toggle="tab">实时事件数</a></li>
+                                </ul>
+                                <div id="myTabContentOfNR" class="tab-content" style="height: 89%">
+                                    <div class="tab-pane fade in active" id="quantityOfNR" style="height: 100%">
+                                    </div>
+                                    <div class="tab-pane fade" id="segmentOfNR" style="height: 100%">
+                                        <div style="height: 100%" id="barChartOfNR">
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="digOfNR">
+                                    </div>
+                                    <div class="tab-pane fade" id="timeEventOfNR">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-md-3"></div>
