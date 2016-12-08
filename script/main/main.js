@@ -7,7 +7,6 @@ $(document).ready(
     $("#toggle").click(function () {
       $("#layersContent").toggle();
     });
-    $('#myTab li:eq(1) a').tab('show');
     var map = L.map('map').setView([39.88642, 116.37452], 18);
 
     var layerController = new fastmap.mapApi.LayerController({ config: App.layersConfig });
@@ -39,9 +38,8 @@ $(document).ready(
           draw: 'simple'
       };
       initBarChart("barChart");
-      initBarChart("barChart1");
-      initBarChart("barChart2");
-      initBarChart("barChart3");
+      initBarChart("barChartOfNR");
+
     $.get('data/beijing-link', function (rs) {
       var data = [];
       var timeData = [];
@@ -201,4 +199,13 @@ function initBarChart(id) {
   if (option && typeof option === "object") {
     myChart.setOption(option, true);
   }
+}
+function changeDivShow(type) {
+    if(type === 'MS') {
+        $('#msDiv').css('display', 'block');
+        $('#nrDiv').css('display', 'none');
+    } else{
+        $('#msDiv').css('display', 'none');
+        $('#nrDiv').css('display', 'block');
+    }
 }
