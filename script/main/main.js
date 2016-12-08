@@ -117,7 +117,7 @@ function createLayerList(layers) {
         ' </label>' +
         '</div>';
     } else {
-      rightHtml = '<div class="checkbox" style="padding-left: 9px">' +
+      rightHtml += '<div class="checkbox" style="padding-left: 9px">' +
         '<label>' +
         '<input type="checkbox" ' + (item.options.visible == true ? 'checked' : "") + ' value="' + item.options.id + '">' + item.options.name + '' +
         ' </label>' +

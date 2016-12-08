@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8bf9dad4-3818-4bee-8559-aae8c0b8a86f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/hackmap.html" afterPath="$PROJECT_DIR$/hackmap.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/script/main/main.js" afterPath="$PROJECT_DIR$/script/main/main.js" />
     </list>
     <ignored path="hackmap.iws" />
@@ -26,7 +25,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="hackmap.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="hackmap.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/hackmap.html">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="515">
@@ -60,14 +59,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/script/main/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="276">
-              <caret line="131" column="21" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="21" />
+            <state relative-caret-position="210">
+              <caret line="122" column="21" selection-start-line="122" selection-start-column="21" selection-end-line="122" selection-end-column="21" />
               <folding>
-                <marker date="1481180090951" expanded="true" signature="3204:3221" ph="..." />
-                <marker date="1481180090951" expanded="true" signature="3497:3514" ph="..." />
+                <marker date="1481181183492" expanded="true" signature="3204:3221" ph="..." />
+                <marker date="1481181183492" expanded="true" signature="3498:3515" ph="..." />
               </folding>
             </state>
           </provider>
@@ -266,12 +265,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1481175840088</updated>
-      <workItem from="1481175841601" duration="4883000" />
+      <workItem from="1481175841601" duration="4984000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4883000" />
+    <option name="totallyTimeSpent" value="4984000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -331,17 +330,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/script/main/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="131" column="21" selection-start-line="131" selection-start-column="13" selection-end-line="131" selection-end-column="21" />
-          <folding>
-            <marker date="1481180090951" expanded="true" signature="3204:3221" ph="..." />
-            <marker date="1481180090951" expanded="true" signature="3497:3514" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/hackmap.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="515">
@@ -370,6 +358,17 @@
             <element signature="n#style#0;n#div#0;n#div#2;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#3;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#3;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/script/main/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="122" column="21" selection-start-line="122" selection-start-column="21" selection-end-line="122" selection-end-column="21" />
+          <folding>
+            <marker date="1481181183492" expanded="true" signature="3204:3221" ph="..." />
+            <marker date="1481181183492" expanded="true" signature="3498:3515" ph="..." />
           </folding>
         </state>
       </provider>
