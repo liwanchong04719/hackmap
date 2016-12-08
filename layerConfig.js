@@ -37,150 +37,150 @@ App.layersConfig = [{
     groupName: "数据",
     layers: [
 
-
-        {
-        url: '/smap/autoadas/linkinfo.json',
-        clazz: fastmap.mapApi.tileJSON,
-        options: {
-            id: 'adasLink',
-            name: 'adas道路线',
-            // id: 'rdLink',
-            maxZoom: 19,
-            debug: false,
-            // this value should be equal to 'radius' of your points
-            buffer: 5,
-            boolPixelCrs: false,
-            parse: fastmap.uikit.canvasFeature.Feature.transform,
-            boundsArr: [],
-            unloadInvisibleTiles: true,
-            reuseTiles: false,
-            mecator: new fastmap.mapApi.MecatorTranform(),
-            updateWhenIdle: true,
-            tileSize: 256,
-            type: 'LineString',
-            zIndex: 16,
-            restrictZoom: 10,
-            editable: false,
-            visible: true,
-            requestType: 'RDLINK',
-            showNodeLevel: 17
-        }
-    }
-        ,
-
-        {
-            url: '/smap/autoadas/rdlink.json',
-            clazz: fastmap.mapApi.tileJSON,
-            options: {
-                id: 'rdLink',
-                name: '道路线',
-                // id: 'rdLink',
-                maxZoom: 19,
-                debug: false,
-                // this value should be equal to 'radius' of your points
-                buffer: 5,
-                boolPixelCrs: false,
-                parse: fastmap.uikit.canvasFeature.Feature.transform,
-                boundsArr: [],
-                unloadInvisibleTiles: true,
-                reuseTiles: false,
-                mecator: new fastmap.mapApi.MecatorTranform(),
-                updateWhenIdle: true,
-                tileSize: 256,
-                type: 'LineString',
-                zIndex: 16,
-                restrictZoom: 10,
-                editable: false,
-                visible: true,
-                requestType: 'RDLINK',
-                showNodeLevel: 17
-            }
-        }
-      ,
-        {
-            url: '/smap/autoadas/linkadas.json',
-            clazz: fastmap.mapApi.tileJSON,
-            options: {
-                id: 'rdLinkadas',
-                name: '道路ADAS信息',
-                // id: 'rdLink',
-                maxZoom: 19,
-                debug: false,
-                // this value should be equal to 'radius' of your points
-                buffer: 5,
-                boolPixelCrs: false,
-                parse: fastmap.uikit.canvasFeature.Feature.transform,
-                boundsArr: [],
-                unloadInvisibleTiles: true,
-                reuseTiles: false,
-                mecator: new fastmap.mapApi.MecatorTranform(),
-                updateWhenIdle: true,
-                tileSize: 256,
-                type: 'LineString',
-                zIndex: 16,
-                restrictZoom: 10,
-                editable: false,
-                visible: true,
-                requestType: 'RDLINK',
-                showNodeLevel: 17
-            }
-        },
-
-
-        {
-            url: '/smap/autoadas/event.json',
-            clazz: fastmap.mapApi.tileJSON,
-            options: {
-               name: 'event信息',
-               id: 'event',
-               maxZoom: 20,
-               debug: false,
-               // this value should be equal to 'radius' of your points
-               buffer: 10,
-               boolPixelCrs: false,
-               parse: fastmap.uikit.canvasFeature.Feature.transform,
-               boundsArr: [],
-               unloadInvisibleTiles: true,
-               reuseTiles: false,
-               mecator: new fastmap.mapApi.MecatorTranform(),
-               updateWhenIdle: true,
-               tileSize: 256,
-               type: 'PointFeature',
-               zIndex: 40,
-               restrictZoom: 10,
-               visible: true,
-               requestType: 'IXPOI',
-               showNodeLevel: 16
-            }
-        },
-
-
-        {
-            url: '/smap/autoadas/poiinfo.json',
-            clazz: fastmap.mapApi.tileJSON,
-            options: {
-           name: 'poi信息',
-           id: 'poi',
-           maxZoom: 20,
-           debug: false,
-           // this value should be equal to 'radius' of your points
-           buffer: 10,
-           boolPixelCrs: false,
-           parse: fastmap.uikit.canvasFeature.Feature.transform,
-           boundsArr: [],
-           unloadInvisibleTiles: true,
-           reuseTiles: false,
-           mecator: new fastmap.mapApi.MecatorTranform(),
-           updateWhenIdle: true,
-           tileSize: 256,
-           type: 'PointFeature',
-           zIndex: 40,
-           restrictZoom: 10,
-           visible: true,
-           requestType: 'IXPOI',
-           showNodeLevel: 16
-            }
-        }
+    //
+    //     {
+    //     url: '/smap/autoadas/linkinfo.json',
+    //     clazz: fastmap.mapApi.tileJSON,
+    //     options: {
+    //         id: 'adasLink',
+    //         name: 'adas道路线',
+    //         // id: 'rdLink',
+    //         maxZoom: 19,
+    //         debug: false,
+    //         // this value should be equal to 'radius' of your points
+    //         buffer: 5,
+    //         boolPixelCrs: false,
+    //         parse: fastmap.uikit.canvasFeature.Feature.transform,
+    //         boundsArr: [],
+    //         unloadInvisibleTiles: true,
+    //         reuseTiles: false,
+    //         mecator: new fastmap.mapApi.MecatorTranform(),
+    //         updateWhenIdle: true,
+    //         tileSize: 256,
+    //         type: 'LineString',
+    //         zIndex: 16,
+    //         restrictZoom: 10,
+    //         editable: false,
+    //         visible: true,
+    //         requestType: 'RDLINK',
+    //         showNodeLevel: 17
+    //     }
+    // }
+    //     ,
+    //
+    //     {
+    //         url: '/smap/autoadas/rdlink.json',
+    //         clazz: fastmap.mapApi.tileJSON,
+    //         options: {
+    //             id: 'rdLink',
+    //             name: '道路线',
+    //             // id: 'rdLink',
+    //             maxZoom: 19,
+    //             debug: false,
+    //             // this value should be equal to 'radius' of your points
+    //             buffer: 5,
+    //             boolPixelCrs: false,
+    //             parse: fastmap.uikit.canvasFeature.Feature.transform,
+    //             boundsArr: [],
+    //             unloadInvisibleTiles: true,
+    //             reuseTiles: false,
+    //             mecator: new fastmap.mapApi.MecatorTranform(),
+    //             updateWhenIdle: true,
+    //             tileSize: 256,
+    //             type: 'LineString',
+    //             zIndex: 16,
+    //             restrictZoom: 10,
+    //             editable: false,
+    //             visible: true,
+    //             requestType: 'RDLINK',
+    //             showNodeLevel: 17
+    //         }
+    //     }
+    //   ,
+    //     {
+    //         url: '/smap/autoadas/linkadas.json',
+    //         clazz: fastmap.mapApi.tileJSON,
+    //         options: {
+    //             id: 'rdLinkadas',
+    //             name: '道路ADAS信息',
+    //             // id: 'rdLink',
+    //             maxZoom: 19,
+    //             debug: false,
+    //             // this value should be equal to 'radius' of your points
+    //             buffer: 5,
+    //             boolPixelCrs: false,
+    //             parse: fastmap.uikit.canvasFeature.Feature.transform,
+    //             boundsArr: [],
+    //             unloadInvisibleTiles: true,
+    //             reuseTiles: false,
+    //             mecator: new fastmap.mapApi.MecatorTranform(),
+    //             updateWhenIdle: true,
+    //             tileSize: 256,
+    //             type: 'LineString',
+    //             zIndex: 16,
+    //             restrictZoom: 10,
+    //             editable: false,
+    //             visible: true,
+    //             requestType: 'RDLINK',
+    //             showNodeLevel: 17
+    //         }
+    //     },
+    //
+    //
+    //     {
+    //         url: '/smap/autoadas/event.json',
+    //         clazz: fastmap.mapApi.tileJSON,
+    //         options: {
+    //            name: 'event信息',
+    //            id: 'event',
+    //            maxZoom: 20,
+    //            debug: false,
+    //            // this value should be equal to 'radius' of your points
+    //            buffer: 10,
+    //            boolPixelCrs: false,
+    //            parse: fastmap.uikit.canvasFeature.Feature.transform,
+    //            boundsArr: [],
+    //            unloadInvisibleTiles: true,
+    //            reuseTiles: false,
+    //            mecator: new fastmap.mapApi.MecatorTranform(),
+    //            updateWhenIdle: true,
+    //            tileSize: 256,
+    //            type: 'PointFeature',
+    //            zIndex: 40,
+    //            restrictZoom: 10,
+    //            visible: true,
+    //            requestType: 'IXPOI',
+    //            showNodeLevel: 16
+    //         }
+    //     },
+    //
+    //
+    //     {
+    //         url: '/smap/autoadas/poiinfo.json',
+    //         clazz: fastmap.mapApi.tileJSON,
+    //         options: {
+    //        name: 'poi信息',
+    //        id: 'poi',
+    //        maxZoom: 20,
+    //        debug: false,
+    //        // this value should be equal to 'radius' of your points
+    //        buffer: 10,
+    //        boolPixelCrs: false,
+    //        parse: fastmap.uikit.canvasFeature.Feature.transform,
+    //        boundsArr: [],
+    //        unloadInvisibleTiles: true,
+    //        reuseTiles: false,
+    //        mecator: new fastmap.mapApi.MecatorTranform(),
+    //        updateWhenIdle: true,
+    //        tileSize: 256,
+    //        type: 'PointFeature',
+    //        zIndex: 40,
+    //        restrictZoom: 10,
+    //        visible: true,
+    //        requestType: 'IXPOI',
+    //        showNodeLevel: 16
+    //         }
+    //     }
 
 
     ]

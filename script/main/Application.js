@@ -3,7 +3,7 @@
  * Class Application
  */
 Application = {}
-//服务地址
-Application.serverHost = '';
-//系统地址
-Application.host = '';
+//统计服务地址
+Application.serversta = 'http://192.168.3.103:8000/autoadas';
+//地图服务地址
+Application.servermap = '';

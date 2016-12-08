@@ -17,23 +17,18 @@ Application.Util = Application.Util || {};
 *  @param successFunc    Ajax请求成功回调函数
 *  @param errorFuc       Ajax请求失败回调函数
 */
-Application.Util.ajaxConstruct = function (url, type, data, dataType, successFuc, errorFuc,accepttype,token) {
+Application.Util.ajaxConstruct = function (url, type, data, dataType, successFuc, errorFuc,accepttype) {
     $.support.cors = true;
     /*
      *	get 方式将access_token加到url里面
      *  post 方式将access_token加到 data里面
      */
-    var access_token = $.cookie("Token");
-    if(access_token == null || access_token == undefined){
-        access_token =token;
-    }
 
     var accept = accepttype?accepttype:'application/json';
     $.ajax({
         headers : {
             'Accept' : 'application/json',
-            'Content-Type' : accept,
-            'X-Auth-Token':access_token
+            'Content-Type' : accept
         },
 
         url: url,

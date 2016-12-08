@@ -3,12 +3,17 @@
 $(document).ready(
   function () {
 
-
+    //116.37452,39.88642
     $("#toggle").click(function () {
       $("#layersContent").toggle();
     });
-    var map = L.map('map',{zoomControl:false}).setView([40.04166598, 116.37452], 14);
+    var map = L.map('map',{zoomControl:false}).setView([39.88642, 116.37452], 16);
 
+    var bound = L.latLngBounds(L.latLng(40.0,116.25),L.latLng(40.083333333333336,116.375));
+
+    var bound = [[40.0,116.25],[40,116.375],[40.083333333333336,116.375],[40.083333333333336,116.25],[40.0,116.25]]
+    //map.fitBounds(bound);
+    L.polyline(bound, {color: "red", weight: 2}).addTo(map);
     $('#myTab li:eq(0) a').tab('show');
 
     var layerController = new fastmap.mapApi.LayerController({ config: App.layersConfig });
@@ -47,6 +52,24 @@ $(document).ready(
       // initBarChart("barChart1");
       // initBarChart("barChart2");
       // initBarChart("barChart3");
+
+
+    var requestBound = map.getBounds();
+
+    $.post('http://172.23.125.124:8017/autoadas/track.json',JSON.stringify({"ak":"E485214565fetch087acde70","bound":[[requestBound.getNorthWest().lng,requestBound.getNorthWest().lat],[requestBound.getSouthEast().lng,requestBound.getSouthEast().lat]]}),function () {
+      console.log('-------------')
+    },'json');
+
+
+    Application.Util.ajaxConstruct('http://fs.navinfo.com/smap/autoadas/track.json',"POST",
+      JSON.stringify({"ak":"E485214565fetch087acde70","bound":[[requestBound.getNorthWest().lng,requestBound.getNorthWest().lat],[requestBound.getSouthEast().lng,requestBound.getSouthEast().lat]]}),"JSON",
+        function (data) {
+
+    },function (err) {
+      console.log('查询服务出错！')
+    })
+
+
     $.get('data/beijing-link', function (rs) {
       var data = [];
       var timeData = [];
@@ -108,6 +131,17 @@ $(document).ready(
       }
     );
   });
+
+
+//查询MS生成量
+function  getMSCreateCount() {
+  Application.Util.ajaxConstruct(Application.serversta+"/stat/second?","GET","JSON",function (data) {
+
+  },function (err) {
+    console.log('查询服务出错！')
+  })
+}
+
 
 
 //生成图层列表
