@@ -42,6 +42,8 @@ $(document).ready(
       //MS生成量专题图
       initBarChart("guagechartcontainer");
       mscountline("linechartcontainer");
+      originalTrackHistogram('originalTrack');
+      // 原始轨迹
       // initBarChart("barChart1");
       // initBarChart("barChart2");
       // initBarChart("barChart3");
@@ -275,7 +277,6 @@ function mscountline(id) {
       }]
     });
   }, 500);
-  ;
   if (option && typeof option === "object") {
     myChart.setOption(option, true);
   }
@@ -292,5 +293,87 @@ function changeDivShow(type) {
         $('#nrDiv').css('display', 'block');
         initBarChart("barChartOfNR");
     }
+}
 
+//原始轨迹数据柱状图
+function originalTrackHistogram(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    option = {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: false },
+                dataView: { show: false, readOnly: false },
+                magicType: { show: false, type: ['line', 'bar'] },
+                restore: { show: false },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        legend: {
+            orient : 'horizontal',
+            x : 'center',
+            y:'bottom',
+            data:['数据','面积']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: (function (){
+                    var now = new Date();
+                    var res = [];
+                    var len = 10;
+                    while (len--) {
+                        res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
+                        now = new Date(now - 2000);
+                    }
+                    return res;
+                })()
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '100%',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                type: 'value',
+                name: '单价',
+                axisLabel: {
+                    formatter: '{value}元'
+                }
+            }
+        ],
+        series : [
+            {
+                name:'出租率',
+                type:'bar',
+                itemStyle:{
+                    normal:{color:'#0099FF'}
+                },
+                data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 90, 100, 32.6, 20.0, 6.4, 3.3]
+            },
+            {
+                name: '单价',
+                type: 'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{color:'#C06410'}
+                },
+                data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+            }
+        ]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
 }
