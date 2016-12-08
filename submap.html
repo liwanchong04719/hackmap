@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/leaflet/dist/leaflet-src.js"></script>
+    <script src="script/mapApi/Application.js"></script>
+    <script src="script/mapApi/common/fastmap.js"></script>
+    <script src="script/mapApi/fastmap-util.js"></script>
+    <script src="script/mapApi/fastmap.js"></script>
+    <script src="script/mapApi/SymbolFactory.js"></script>
+    <script src="script/mapApi/Feature.js"></script>
+    <script src="script/mapApi/IXPOI.js"></script>
+    <script src="script/mapApi/RdLink.js"></script>
+    <script src="script/mapApi/EventController.js"></script>
+    <script src="script/mapApi/Tile.js"></script>
+
+    <script src="script/mapApi/symbol/Template.js"></script>
+    <script src="script/mapApi/symbol/Matrix.js"></script>
+    <script src="script/mapApi/symbol/Vector.js"></script>
+    <script src="script/mapApi/symbol/Point.js"></script>
+    <script src="script/mapApi/symbol/SymbolsFile.js"></script>
+    <script src="script/mapApi/symbol/LineSegment.js"></script>
+    <script src="script/mapApi/symbol/LineString.js"></script>
+    <script src="script/mapApi/symbol/SampleLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/CartoLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/MarkerLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/CompositeLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/TiltedCrossPointSymbol.js"></script>
+
+    <script src="script/mapApi/symbol/HashLineSymbol.js"></script>
+    <script src="script/mapApi/LayerRender.js"></script>
+    <script src="script/mapApi/layer/TileJSONLayer.js"></script>
+
+    <script src="script/mapApi/MecatorTransform.js"></script>
+    <script src="node_modules/leaflet/mapv.js"></script>
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet/dist/leaflet.css"/>
+    <style>
+        #submap {
+            width: 1000px;
+            height: 600px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<map id="submap"></map>
+
+<script>
+    var mymap = L.map('submap').setView([39.9, 116.3], 16);
+
+    var dataSet = new mapv.DataSet(data);
+
+    var options = {
+        strokeStyle: 'rgba(53,57,255,0.5)',
+        coordType: 'bd09mc',
+        // globalCompositeOperation: 'lighter',
+        shadowColor: 'rgba(53,57,255,0.2)',
+        shadowBlur: 3,
+        lineWidth: 3.0,
+        draw: 'simple'
+    }
+
+    var mapvLayer = new mapv.leafletMapLayer(map, dataSet, options);
+
+
+
+
+//    var cloudmade = new L.TileLayer('http://{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={y}&type=vector&style=0', {
+//        subdomains: ["rt0", "rt1", "rt2", "rt3"],
+//        tms: true,
+//        maxZoom: 18
+//    }).addTo(mymap);
+//    mymap.on('move', function (e) {
+//        window.opener.movemap(mymap.getCenter(), mymap.getZoom())
+//    })
+//    var tilejson = fastmap.mapApi.tileJSON(App.Util.createTileRequestObject('/render/obj/getByTileWithGap?',"RDLINK"),{
+//        id: 'rdLink',
+//        name: '道路线',
+//        // id: 'rdLink',
+//        maxZoom: 18,
+//        debug: false,
+//        // this value should be equal to 'radius' of your points
+//        buffer: 5,
+//        boolPixelCrs: true,
+//        parse: fastmap.uikit.canvasFeature.Feature.transform,
+//        boundsArr: [],
+//        unloadInvisibleTiles: true,
+//        reuseTiles: false,
+//        mecator: new fastmap.mapApi.MecatorTranform(),
+//        updateWhenIdle: true,
+//        tileSize: 256,
+//        type: 'LineString',
+//        zIndex: 16,
+//        restrictZoom: 10,
+//        editable: false,
+//        visible: true,
+//        requestType: 'RDLINK',
+//        showNodeLevel: 17
+//    })
+//    mymap.addLayer(tilejson)
+//
+//
+//
+//    var tilejsonpoint = fastmap.mapApi.tileJSON(App.Util.createTileRequestObject('/render/obj/getByTileWithGap?',"IXPOI"),{
+//        name: '兴趣点（POI）',
+//        id: 'poi',
+//        maxZoom: 20,
+//        debug: false,
+//        // this value should be equal to 'radius' of your points
+//        buffer: 10,
+//        boolPixelCrs: true,
+//        parse: fastmap.uikit.canvasFeature.Feature.transform,
+//        boundsArr: [],
+//        unloadInvisibleTiles: true,
+//        reuseTiles: false,
+//        mecator: new fastmap.mapApi.MecatorTranform(),
+//        updateWhenIdle: true,
+//        tileSize: 256,
+//        type: 'PointFeature',
+//        zIndex: 40,
+//        restrictZoom: 10,
+//        visible: true,
+//        requestType: 'IXPOI',
+//        showNodeLevel: 16
+//    })
+//    mymap.addLayer(tilejsonpoint)
+
+
+</script>
+</body>
+</html>
