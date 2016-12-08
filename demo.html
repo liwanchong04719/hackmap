@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/jquery/jquery-1.11.1.js"></script>
+    <script src="node_modules/leaflet/dist/leaflet-src.js"></script>
+    <script src="script/mapApi/Application.js"></script>
+    <script src="script/mapApi/common/fastmap.js"></script>
+    <script src="script/mapApi/fastmap-util.js"></script>
+    <script src="script/mapApi/fastmap.js"></script>
+    <script src="script/mapApi/SymbolFactory.js"></script>
+    <script src="script/mapApi/Feature.js"></script>
+    <script src="script/mapApi/IXPOI.js"></script>
+    <script src="script/mapApi/RdLink.js"></script>
+    <script src="script/mapApi/EventController.js"></script>
+    <script src="script/mapApi/Tile.js"></script>
+
+    <script src="script/mapApi/symbol/Template.js"></script>
+    <script src="script/mapApi/symbol/Matrix.js"></script>
+    <script src="script/mapApi/symbol/Vector.js"></script>
+    <script src="script/mapApi/symbol/Point.js"></script>
+    <script src="script/mapApi/symbol/SymbolsFile.js"></script>
+    <script src="script/mapApi/symbol/LineSegment.js"></script>
+    <script src="script/mapApi/symbol/LineString.js"></script>
+    <script src="script/mapApi/symbol/SampleLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/CartoLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/MarkerLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/CompositeLineSymbol.js"></script>
+    <script src="script/mapApi/symbol/TiltedCrossPointSymbol.js"></script>
+
+    <script src="script/mapApi/symbol/HashLineSymbol.js"></script>
+    <script src="script/mapApi/LayerRender.js"></script>
+    <script src="script/mapApi/layer/TileJSONLayer.js"></script>
+
+    <script src="script/mapApi/MecatorTransform.js"></script>
+    <script src="layerConfig.js"></script>
+    <script src="script/mapApi/EventController.js"></script>
+    <script src="script/mapApi/LayerController.js"></script>
+
+    <script>
+        window.LMap = {};
+    </script>
+
+    <script type="text/javascript" src="node_modules/mapv.js"></script>
+
+    <script src="node_modules/echarts/dist/echarts.js"></script>
+    <link rel="stylesheet" type="text/css" href="node_modules/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-3.3.5/css/bootstrap.css">
+    <!--<link rel="stylesheet" type="text/css" href="node_modules/bootstrap-3.3.5/css/bootstrap-theme.css"/>-->
+
+    <script src="script/main/main.js"> </script>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+
+        }
+        .wrap {
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        .leftTopDiv {
+            position: absolute;
+            z-index: 100;
+            left: 30px;
+            line-height: 2.5;
+            text-align: center;
+            background-color: white;
+            margin-top: 30px;
+            height: 30px;
+            width: 100px;
+            border-radius: 4px;
+            border: 1px solid black;
+        }
+        .rightTopDiv {
+            position: absolute;
+            z-index: 100;
+            line-height: 2.5;
+            text-align: center;
+            right: 30px;
+            background-color: white;
+            margin-top: 30px;
+            height: 30px;
+            width: 100px;
+            border-radius: 4px;
+            border: 1px solid black;
+        }
+        .layersDiv {
+            position: absolute;
+            z-index: 100;
+            right: 30px;
+            background-color: white;
+            margin-top: 60px;
+            height: 120px;
+            width: 230px;
+            border-radius: 4px;
+            border: 1px solid black;
+            display: none;
+        }
+    </style>
+
+</head>
+<body>
+<div class="container-fluid" style="height: 100%;padding-left: 0px;padding-right: 0px">
+    <div class="col-md-12" style="height: 100%;padding-top: 0px;">
+        <div class="row" style="height: 100%;margin-right: 0px;margin-left: 0px">
+            <div class="col-md-12"  style="height: 100%">
+                <div id="map" style="width: 100%;height: 100%;">
+                    <div class="leftTopDiv" id="showData">
+                        <a href="#dataDiv"> 数据统计</a>
+                    </div>
+                    <div class="rightTopDiv" id="toggle">图层选择</div>
+                    <div class="layersDiv" id="layersContent">
+                        <div class="row" style="height: 100%;margin-right: 0px;margin-left: 0px">
+                            <div id="leftCheckBox" class="col-md-6" style="height: 100%;"></div>
+                            <div id="rightCheckBox" class="col-md-6" style="height: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="dataDiv" style="height: 100%;">
+                    <div class="leftTopDiv" id="showMap">
+                        <a href="#map">地图实时</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
