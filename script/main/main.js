@@ -28,7 +28,6 @@ $(document).ready(
 
     var animationLayer = null;
     var animationdataSet = null;
-
     var options = {
       fillStyle: 'rgba(255, 250, 250, 0.2)',
       coordType: 'bd09mc',
@@ -51,6 +50,7 @@ $(document).ready(
       // initBarChart("barChart1");
       // initBarChart("barChart2");
       // initBarChart("barChart3");
+
 
     var requestBound = map.getBounds();
 
@@ -324,6 +324,7 @@ function changeDivShow(type) {
     } else{
         $('#msDiv').css('display', 'none');
         $('#nrDiv').css('display', 'block');
+        initBarChart("barChartOfNR");
     }
 
 }
