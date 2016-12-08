@@ -42,8 +42,8 @@ App.layersConfig = [{
         url: '/smap/autoadas/linkinfo.json',
         clazz: fastmap.mapApi.tileJSON,
         options: {
-            id: 'rdLink',
-            name: '道路线',
+            id: 'adasLink',
+            name: 'adas道路线',
             // id: 'rdLink',
             maxZoom: 19,
             debug: false,

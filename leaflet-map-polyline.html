@@ -20,10 +20,9 @@
     </style>
 </head>
 <body>
-<div class="wrapcontainer">
-    <div id="map"></div>
-</div>
 
+<div id="map"></div>
+<canvas id="canvas"></canvas>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 
@@ -41,17 +40,18 @@
 <script src="//cdn.bootcss.com/jquery/1.11.0/jquery.js"></script>
 <script type="text/javascript">
 
-    window.LMap = L.map('map').setView([39.88642, 116.37452], 10);
+    window.LMap = L.map('map').setView([30.598428, 114.321317], 10);
 
-    L.tileLayer('http://{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={y}&type=vector&style=0', {
-        subdomains: ["rt0", "rt1", "rt2", "rt3"],
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
         maxZoom: 18,
-        tms: true,
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
         id: 'mapbox.streets'
     }).addTo(LMap);
 //
 
-//    // 百度地图API功能116.37452,39.88642
+//    // 百度地图API功能
 //    var map = new BMap.Map("map", {
 //        enableMapClick: false
 //    });    // 创建Map实例
@@ -202,29 +202,26 @@
     var transform = new fastmap.mapApi.MecatorTranform();
 
 
-    $.get('data/beijing-link', function (rs) {
+    $.get('data/wuhan-car', function (rs) {
 
         var data = [];
         var timeData = [];
 
-        rs = JSON.parse(rs);
-
-
+        rs = rs.split("\n");
         console.log(rs.length);
         for (var i = 0; i < rs.length; i++) {
-            var item = rs[i].geometry.coordinates;
+            var item = rs[i].split(',');
             var coordinates = [];
             for (j = 0; j < item.length; j += 2) {
-                //var co = transform.mer2lonlat(item[j],item[j+1])
-                var co = item[j]
+                var co = transform.mer2lonlat(item[j],item[j+1])
                 coordinates.push(co);
                 timeData.push({
                     geometry: {
                         type: 'Point',
-                        coordinates: item[j]
+                        coordinates: co
                     },
                     count: 1,
-                    time: 2*j
+                    time: j
                 });
             }
             data.push({
@@ -236,11 +233,12 @@
             });
 
         }
-        //data = data.splice(0,data.length-1);
+        data = data.splice(0,data.length-1);
 
         var dataSet = new mapv.DataSet(data);
 
         var options = {
+
             strokeStyle: 'rgba(53,57,255,0.5)',
             coordType: 'bd09mc',
             // globalCompositeOperation: 'lighter',
@@ -251,28 +249,35 @@
         }
 
         var mapvLayer = new mapv.leafletMapLayer(LMap, dataSet, options);
-
+        //window.LMap.addLayer(mapvLayer);
         //LMap.addLayer(mapvLayer);
         timeData = timeData.splice(0,timeData.length-1);
         var dataSet = new mapv.DataSet(timeData);
 
         var options = {
+
             fillStyle: 'rgba(255, 250, 250, 0.2)',
             coordType: 'bd09mc',
             globalCompositeOperation: "lighter",
-            size: 3,
+            size: 1.5,
             animation: {
+
                 stepsRange: {
                     start: 0,
-                    end: 150
+                    end: 100
                 },
-                trails: 5,
-                duration: 15,
+                trails: 10,
+                duration: 10,
             },
             draw: 'simple'
         }
 
         var mapvLayer = new mapv.leafletMapLayer(LMap, dataSet, options);
+        //window.LMap.addLayer(mapvLayer);
+        setTimeout(function () {
+            mapvLayer.onRemove()
+        },10000)
+
     });
 
 
