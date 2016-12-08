@@ -38,7 +38,6 @@ $(document).ready(
           draw: 'simple'
       };
       initBarChart("barChart");
-      initBarChart("barChartOfNR");
 
     $.get('data/beijing-link', function (rs) {
       var data = [];
@@ -207,5 +206,6 @@ function changeDivShow(type) {
     } else{
         $('#msDiv').css('display', 'none');
         $('#nrDiv').css('display', 'block');
+        initBarChart("barChartOfNR");
     }
 }
