@@ -45,7 +45,9 @@ $(document).ready(
     }
       //MS生成量专题图
       instrumentPanel("guagechartcontainer");
+      instrumentPanelOfNR("guagechartcontainerOfNR");
       mscountline("linechartcontainer");
+      mscountlineOfNR("linechartcontainerOfNR");
       originalTrackHistogram('originalTrack');
       didiHistogram("didiChart");
       segmentHistogram('segmentChart');
@@ -268,36 +270,17 @@ function mscountline(id) {
   var dom = document.getElementById(id);
   var myChart = echarts.init(dom);
   var app = {};
-  var option = null;
   var base = +new Date(2014, 9, 3);
-  var oneDay = 24 * 3600 * 1000;
   var date = [];
 
   var data = [Math.random() * 150];
   var now = new Date(base);
 
-  function addData(shift) {
-    now = [now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/');
-    date.push(now);
-    data.push((Math.random() - 0.4) * 10 + data[data.length - 1]);
-
-    if (shift) {
-      date.shift();
-      data.shift();
-    }
-
-    now = new Date(+new Date(now) + oneDay);
-  }
-
-  for (var i = 1; i < 100; i++) {
-    addData();
-  }
-
   var option = {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: date
+      data:[],
     },
     yAxis: {
       boundaryGap: [0, '50%'],
@@ -305,7 +288,7 @@ function mscountline(id) {
     },
     series: [
       {
-        name: '成交',
+        name: 'poi',
         type: 'line',
         smooth: true,
         symbol: 'none',
@@ -313,28 +296,224 @@ function mscountline(id) {
         areaStyle: {
           normal: {}
         },
-        data: data
+        data: []
+      },
+        {
+        name: 'segment',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        stack: 'a',
+        areaStyle: {
+          normal: {}
+        },
+        data: []
+      },
+        {
+        name: 'sensor',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        stack: 'a',
+        areaStyle: {
+          normal: {}
+        },
+        data: []
+      },
+        {
+        name: 'park',
+        type: 'line',
+        smooth: true,
+        symbol: 'none',
+        stack: 'a',
+        areaStyle: {
+          normal: {}
+        },
+        data: []
       }
     ]
   };
 
   setInterval(function () {
-    addData(true);
-    myChart.setOption({
-      xAxis: {
-        data: date
-      },
-      series: [{
-        name: '成交',
-        data: data
-      }]
-    });
-  }, 500);
-  if (option && typeof option === "object") {
-    myChart.setOption(option, true);
-  }
-}
+      var param = {
+          "statType": [2],
+          "objType": 0,
+          "second": parseInt(new Date().getTime()/1000),
+          "interval": 2,
+      };
+      $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+        function (data) {
+            var linkObj = data.data[0].result.link;
+            for (var key in linkObj) {
+                if( option.xAxis.data.length > 6 ) {
+                    option.xAxis.data.shift();
+                    option.xAxis.data.push(key);
+                } else {
+                    option.xAxis.data.push(key);
+                }
+                if(option.series[0].data.length > 6) {
+                    option.series[0].data.shift();
+                    option.series[0].data.push(linkObj[key]);
+                } else {
+                    option.series[0].data.push(linkObj[key])
+                }
+            }
+            var poiObj = data.data[0].result.poi;
+            for (var key in linkObj) {
+                if(option.series[1].data.length > 6) {
+                    option.series[1].data.shift();
+                    option.series[1].data.push(poiObj[key]);
+                } else {
+                    option.series[1].data.push(poiObj[key])
+                }
+            }
+            var absObj = data.data[0].result.abs;
+            for (var key in linkObj) {
+                if(option.series[2].data.length > 6) {
+                    option.series[2].data.shift();
+                    option.series[2].data.push(absObj[key]);
+                } else {
+                    option.series[2].data.push(absObj[key])
+                }
+            }
+            var parkObj = data.data[0].result.park;
+            for (var key in linkObj) {
+                if(option.series[3].data.length > 6) {
+                    option.series[3].data.shift();
+                    option.series[3].data.push(parkObj[key]);
+                } else {
+                    option.series[3].data.push(parkObj[key])
+                }
+            }
+            myChart.setOption(option, true);
+        });
 
+  }, 2000);
+}
+function mscountlineOfNR(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    var base = +new Date(2014, 9, 3);
+    var date = [];
+
+    var data = [Math.random() * 150];
+    var now = new Date(base);
+
+    var option = {
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data:[],
+        },
+        yAxis: {
+            boundaryGap: [0, '50%'],
+            type: 'value'
+        },
+        series: [
+            {
+                name: 'poi',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                stack: 'a',
+                areaStyle: {
+                    normal: {}
+                },
+                data: []
+            },
+            {
+                name: 'segment',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                stack: 'a',
+                areaStyle: {
+                    normal: {}
+                },
+                data: []
+            },
+            {
+                name: 'sensor',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                stack: 'a',
+                areaStyle: {
+                    normal: {}
+                },
+                data: []
+            },
+            {
+                name: 'park',
+                type: 'line',
+                smooth: true,
+                symbol: 'none',
+                stack: 'a',
+                areaStyle: {
+                    normal: {}
+                },
+                data: []
+            }
+        ]
+    };
+
+    setInterval(function () {
+        var param = {
+            "statType": [6],
+            "objType": 0,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              var linkObj = data.data[0].result.link;
+              for (var key in linkObj) {
+                  if( option.xAxis.data.length > 6 ) {
+                      option.xAxis.data.shift();
+                      option.xAxis.data.push(key);
+                  } else {
+                      option.xAxis.data.push(key);
+                  }
+                  if(option.series[0].data.length > 6) {
+                      option.series[0].data.shift();
+                      option.series[0].data.push(linkObj[key]);
+                  } else {
+                      option.series[0].data.push(linkObj[key])
+                  }
+              }
+              var poiObj = data.data[0].result.poi;
+              for (var key in linkObj) {
+                  if(option.series[1].data.length > 6) {
+                      option.series[1].data.shift();
+                      option.series[1].data.push(poiObj[key]);
+                  } else {
+                      option.series[1].data.push(poiObj[key])
+                  }
+              }
+              var absObj = data.data[0].result.abs;
+              for (var key in linkObj) {
+                  if(option.series[2].data.length > 6) {
+                      option.series[2].data.shift();
+                      option.series[2].data.push(absObj[key]);
+                  } else {
+                      option.series[2].data.push(absObj[key])
+                  }
+              }
+              var parkObj = data.data[0].result.park;
+              for (var key in linkObj) {
+                  if(option.series[3].data.length > 6) {
+                      option.series[3].data.shift();
+                      option.series[3].data.push(parkObj[key]);
+                  } else {
+                      option.series[3].data.push(parkObj[key])
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+    }, 2000);
+}
 
 
 function changeDivShow(type) {
@@ -1287,13 +1466,13 @@ function instrumentPanel(id) {
         },
         series : [
             {
-                name: '速度',
+                name: '轨迹',
                 type: 'gauge',
                 min: 0,
                 max: 220,
-                center: ['15%', '25%'],    // 默认全局居中
+                center: ['25%', '25%'],    // 默认全局居中
                 splitNumber: 11,
-                radius: '30%',
+                radius: '50%',
                 axisLine: {            // 坐标轴线
                     lineStyle: {       // 属性lineStyle控制线条样式
                         width: 10
@@ -1313,8 +1492,7 @@ function instrumentPanel(id) {
                 },
                 title : {
                     textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                        fontWeight: 'bolder',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontStyle: 'italic'
                     }
                 },
@@ -1323,16 +1501,16 @@ function instrumentPanel(id) {
                         fontWeight: 'bolder'
                     }
                 },
-                data:[{value: 40, name: 'km/h'}]
+                data:[{value: 40, name: '个/秒'}]
             },
             {
-                name: '速度',
+                name: 'POI',
                 type: 'gauge',
                 min: 0,
                 max: 220,
-                center: ['45%', '25%'],    // 默认全局居中
+                center: ['55%', '25%'],    // 默认全局居中
                 splitNumber: 11,
-                radius: '30%',
+                radius: '50%',
                 axisLine: {            // 坐标轴线
                     lineStyle: {       // 属性lineStyle控制线条样式
                         width: 10
@@ -1352,8 +1530,7 @@ function instrumentPanel(id) {
                 },
                 title : {
                     textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                        fontWeight: 'bolder',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontStyle: 'italic'
                     }
                 },
@@ -1362,16 +1539,16 @@ function instrumentPanel(id) {
                         fontWeight: 'bolder'
                     }
                 },
-                data:[{value: 40, name: 'km/h'}]
+                data:[{value: 40, name: '个/秒'}]
             },
             {
-                name: '速度',
+                name: 'abs',
                 type: 'gauge',
                 min: 0,
                 max: 220,
-                center: ['15%', '55%'],    // 默认全局居中
+                center: ['25%', '70%'],    // 默认全局居中
                 splitNumber: 11,
-                radius: '30%',
+                radius: '50%',
                 axisLine: {            // 坐标轴线
                     lineStyle: {       // 属性lineStyle控制线条样式
                         width: 10
@@ -1391,8 +1568,7 @@ function instrumentPanel(id) {
                 },
                 title : {
                     textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                        fontWeight: 'bolder',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontStyle: 'italic'
                     }
                 },
@@ -1401,16 +1577,16 @@ function instrumentPanel(id) {
                         fontWeight: 'bolder'
                     }
                 },
-                data:[{value: 40, name: 'km/h'}]
+                data:[{value: 40, name: '个/秒'}]
             },
             {
-                name: '速度',
+                name: '点火系统',
                 type: 'gauge',
                 min: 0,
                 max: 220,
-                center: ['45%', '55%'],    // 默认全局居中
+                center: ['55%', '70%'],    // 默认全局居中
                 splitNumber: 11,
-                radius: '30%',
+                radius: '50%',
                 axisLine: {            // 坐标轴线
                     lineStyle: {       // 属性lineStyle控制线条样式
                         width: 10
@@ -1430,8 +1606,7 @@ function instrumentPanel(id) {
                 },
                 title : {
                     textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
-                        fontWeight: 'bolder',
-                        fontSize: 20,
+                        fontSize: 16,
                         fontStyle: 'italic'
                     }
                 },
@@ -1440,14 +1615,237 @@ function instrumentPanel(id) {
                         fontWeight: 'bolder'
                     }
                 },
-                data:[{value: 40, name: 'km/h'}]
+                data:[{value: 40, name: '个/秒'}]
             }
         ]
     };
-
-
+    setInterval(function (){
+        var param = {
+            "statType": [2],
+            "objType": 0,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              var linkObj = data.data[0].result.link;
+              for (var key in linkObj) {
+                  option.series[0].data[0].value = linkObj[key];
+              }
+              var poiObj = data.data[0].result.poi;
+              for (var key in linkObj) {
+                  option.series[1].data[0].value = poiObj[key];
+              }
+              var absObj = data.data[0].result.abs;
+              for (var key in linkObj) {
+                  option.series[2].data[0].value = absObj[key];
+              }
+              var parkObj = data.data[0].result.park;
+              for (var key in linkObj) {
+                  option.series[3].data[0].value = parkObj[key];
+              }
+              myChart.setOption(option,true);
+          });
+    },2000);
 }
-
+function instrumentPanelOfNR(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var option = {
+        tooltip : {
+            formatter: "{a} <br/>{c} {b}"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        series : [
+            {
+                name: '轨迹',
+                type: 'gauge',
+                min: 0,
+                max: 220,
+                center: ['25%', '25%'],    // 默认全局居中
+                splitNumber: 11,
+                radius: '50%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                title : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontSize: 16,
+                        fontStyle: 'italic'
+                    }
+                },
+                detail : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 40, name: '个/秒'}]
+            },
+            {
+                name: 'POI',
+                type: 'gauge',
+                min: 0,
+                max: 220,
+                center: ['55%', '25%'],    // 默认全局居中
+                splitNumber: 11,
+                radius: '50%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                title : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontSize: 16,
+                        fontStyle: 'italic'
+                    }
+                },
+                detail : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 40, name: '个/秒'}]
+            },
+            {
+                name: 'abs',
+                type: 'gauge',
+                min: 0,
+                max: 220,
+                center: ['25%', '70%'],    // 默认全局居中
+                splitNumber: 11,
+                radius: '50%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                title : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontSize: 16,
+                        fontStyle: 'italic'
+                    }
+                },
+                detail : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 40, name: '个/秒'}]
+            },
+            {
+                name: '点火系统',
+                type: 'gauge',
+                min: 0,
+                max: 220,
+                center: ['55%', '70%'],    // 默认全局居中
+                splitNumber: 11,
+                radius: '50%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                title : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontSize: 16,
+                        fontStyle: 'italic'
+                    }
+                },
+                detail : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 40, name: '个/秒'}]
+            }
+        ]
+    };
+    setInterval(function (){
+        var param = {
+            "statType": [6],
+            "objType": 0,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              var linkObj = data.data[0].result.link;
+              for (var key in linkObj) {
+                  option.series[0].data[0].value = linkObj[key];
+              }
+              var poiObj = data.data[0].result.poi;
+              for (var key in linkObj) {
+                  option.series[1].data[0].value = poiObj[key];
+              }
+              var absObj = data.data[0].result.abs;
+              for (var key in linkObj) {
+                  option.series[2].data[0].value = absObj[key];
+              }
+              var parkObj = data.data[0].result.park;
+              for (var key in linkObj) {
+                  option.series[3].data[0].value = parkObj[key];
+              }
+              myChart.setOption(option,true);
+          });
+    },2000);
+}
 
 function getStaticForAccess() {
   $.post('http://fs.navinfo.com/smap/autoadas/s_day.json',JSON.stringify({"ak":"E485214565fetch087acde70","statType":"event","day":new Date().getFullYear()+""+(new Date().getMonth()+1)+new Date().getDay()}),function (data) {
@@ -1461,12 +1859,3 @@ function getStaticTotal() {
     console.log('-------------')
   },'json');
 }
-
-
-setInterval(function (){
-  option.series[0].data[0].value = (Math.random()*100).toFixed(2) - 0;
-  option.series[1].data[0].value = (Math.random()*100).toFixed(2) - 0;
-  option.series[2].data[0].value = (Math.random()*2).toFixed(2) - 0;
-  option.series[3].data[0].value = (Math.random()*2).toFixed(2) - 0;
-  myChart.setOption(option,true);
-},2000);
