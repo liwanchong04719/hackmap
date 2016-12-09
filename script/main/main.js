@@ -45,9 +45,12 @@ $(document).ready(
       zIndex:41,
     }
       //MS生成量专题图
-      initBarChart("guagechartcontainer");
+      instrumentPanel("guagechartcontainer");
       mscountline("linechartcontainer");
       originalTrackHistogram('originalTrack');
+      didiHistogram("didiChart");
+      segmentHistogram('segmentChart');
+      digPoiHistogram("digChart");
       // 原始轨迹
       // initBarChart("barChart1");
       // initBarChart("barChart2");
@@ -74,7 +77,6 @@ $(document).ready(
       var data = [];
       var timeData = [];
       rs = JSON.parse(rs);
-      console.log(rs.length);
       for (var i = 0; i < rs.length; i++) {
         var item = rs[i].geometry.coordinates;
         var coordinates = [];
@@ -172,7 +174,7 @@ function initBarChart(id) {
   var dom = document.getElementById(id);
   var myChart = echarts.init(dom);
   var app = {};
-  option = {
+  var option = {
     backgroundColor: '#fff',
     tooltip: {
       trigger: 'axis'
@@ -249,7 +251,7 @@ function mscountline(id) {
   var dom = document.getElementById(id);
   var myChart = echarts.init(dom);
   var app = {};
-  option = null;
+  var option = null;
   var base = +new Date(2014, 9, 3);
   var oneDay = 24 * 3600 * 1000;
   var date = [];
@@ -274,7 +276,7 @@ function mscountline(id) {
     addData();
   }
 
-  option = {
+  var option = {
     xAxis: {
       type: 'category',
       boundaryGap: false,
@@ -325,7 +327,6 @@ function changeDivShow(type) {
     } else{
         $('#msDiv').css('display', 'none');
         $('#nrDiv').css('display', 'block');
-        initBarChart("barChartOfNR");
     }
 }
 
@@ -334,7 +335,7 @@ function originalTrackHistogram(id) {
     var dom = document.getElementById(id);
     var myChart = echarts.init(dom);
     var app = {};
-    option = {
+    var option = {
         backgroundColor: '#fff',
         tooltip: {
             trigger: 'axis'
@@ -354,21 +355,12 @@ function originalTrackHistogram(id) {
             orient : 'horizontal',
             x : 'center',
             y:'bottom',
-            data:['数据','面积']
+            data:['接入量','处理量']
         },
         xAxis: [
             {
                 type: 'category',
-                data: (function (){
-                    var now = new Date();
-                    var res = [];
-                    var len = 10;
-                    while (len--) {
-                        res.unshift(now.toLocaleTimeString().replace(/^\D*/,''));
-                        now = new Date(now - 2000);
-                    }
-                    return res;
-                })()
+                data: [formateTime()]
             }
         ],
         yAxis: [
@@ -381,7 +373,7 @@ function originalTrackHistogram(id) {
             },
             {
                 type: 'value',
-                name: '单价',
+                name: '数量',
                 axisLabel: {
                     formatter: '{value}元'
                 }
@@ -389,25 +381,728 @@ function originalTrackHistogram(id) {
         ],
         series : [
             {
-                name:'出租率',
+                name:'总量',
                 type:'bar',
                 itemStyle:{
                     normal:{color:'#0099FF'}
                 },
-                data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 90, 100, 32.6, 20.0, 6.4, 3.3]
+                data:[0]
             },
             {
-                name: '单价',
+                name: '处理量',
                 type: 'line',
                 yAxisIndex: 1,
                 itemStyle:{
                     normal:{color:'#C06410'}
                 },
-                data:[2.0, 2.2, 3.3, 4.5, 6.3, 10.2, 20.3, 23.4, 23.0, 16.5, 12.0, 6.2]
+                data:[0]
             }
         ]
     };
-    if (option && typeof option === "object") {
-        myChart.setOption(option, true);
-    }
+    setInterval(function () {
+        var param = {
+            "statType": [0,1],
+            "objType": 1,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              for (var i = 0, len =data.data.length; i<len; i++) {
+                  if (data.data[i].statType === 0) {
+                      var linkObj = data.data[0].result.link;
+                      for (var key in linkObj) {
+                          if(option.xAxis[0].data.length > 8) {
+                              option.xAxis[0].data.shift();
+                              option.xAxis[0].data.push(key);
+                          } else {
+                              option.xAxis[0].data.push(key);
+                          }
+                          if(option.series[0].data.length >8) {
+                              option.series[0].data.shift();
+                              option.series[0].data.push(linkObj[key]);
+                          } else {
+                              option.series[0].data.push(linkObj[key]);
+                          }
+                      }
+                  }
+                  if(data.data[i].statType === 1) {
+                      var linksObj = data.data[0].result.link;
+                      for (var keys in linksObj) {
+                          if(option.series[1].data.length >8) {
+                              option.series[1].data.shift();
+                              option.series[1].data.push(linksObj[keys]);
+                          } else {
+                              option.series[1].data.push(linksObj[keys]);
+                          }
+                      }
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+
+    },2000)
+
+}
+// 滴滴订单数据柱状图
+function didiHistogram(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: false },
+                dataView: { show: false, readOnly: false },
+                magicType: { show: false, type: ['line', 'bar'] },
+                restore: { show: false },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        legend: {
+            orient : 'horizontal',
+            x : 'center',
+            y:'bottom',
+            data:['接入量','处理量']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: [formateTime()]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '100%',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                type: 'value',
+                name: '数量',
+                axisLabel: {
+                    formatter: '{value}元'
+                }
+            }
+        ],
+        series : [
+            {
+                name:'总量',
+                type:'bar',
+                itemStyle:{
+                    normal:{color:'#0099FF'}
+                },
+                data:[0]
+            },
+            {
+                name: '处理量',
+                type: 'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{color:'#C06410'}
+                },
+                data:[0]
+            }
+        ]
+    };
+    setInterval(function () {
+        var param = {
+            "statType": [0,1],
+            "objType": 2,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              for (var i = 0, len =data.data.length; i<len; i++) {
+                  if (data.data[i].statType === 0) {
+                      var poiObj = data.data[0].result.poi;
+                      for (var key in poiObj) {
+                          if(option.xAxis[0].data.length > 8) {
+                              option.xAxis[0].data.shift();
+                              option.xAxis[0].data.push(key);
+                          } else {
+                              option.xAxis[0].data.push(key);
+                          }
+                          if(option.series[0].data.length >8) {
+                              option.series[0].data.shift();
+                              option.series[0].data.push(poiObj[key]);
+                          } else {
+                              option.series[0].data.push(poiObj[key]);
+                          }
+                      }
+                  }
+                  if(data.data[i].statType === 1) {
+                      var poisObj = data.data[0].result.poi;
+                      for (var keys in poisObj) {
+                          if(option.series[1].data.length >8) {
+                              option.series[1].data.shift();
+                              option.series[1].data.push(poisObj[keys]);
+                          } else {
+                              option.series[1].data.push(poisObj[keys]);
+                          }
+                      }
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+
+    },2000)
+}
+// 截取轨迹段数 NR
+function segmentHistogram(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: false },
+                dataView: { show: false, readOnly: false },
+                magicType: { show: false, type: ['line', 'bar'] },
+                restore: { show: false },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        legend: {
+            orient : 'horizontal',
+            x : 'center',
+            y:'bottom',
+            data:['接入量','处理量']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: [formateTime()]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '100%',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                type: 'value',
+                name: '数量',
+                axisLabel: {
+                    formatter: '{value}元'
+                }
+            }
+        ],
+        series : [
+            {
+                name:'总量',
+                type:'bar',
+                itemStyle:{
+                    normal:{color:'#0099FF'}
+                },
+                data:[0]
+            },
+            {
+                name: '处理量',
+                type: 'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{color:'#C06410'}
+                },
+                data:[0]
+            }
+        ]
+    };
+    setInterval(function () {
+        var param = {
+            "statType": [4,5],
+            "objType": 1,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              for (var i = 0, len =data.data.length; i<len; i++) {
+                  if (data.data[i].statType === 4) {
+                      var linkObj = data.data[0].result.link;
+                      for (var key in linkObj) {
+                          if(option.xAxis[0].data.length > 8) {
+                              option.xAxis[0].data.shift();
+                              option.xAxis[0].data.push(key);
+                          } else {
+                              option.xAxis[0].data.push(key);
+                          }
+                          if(option.series[0].data.length >8) {
+                              option.series[0].data.shift();
+                              option.series[0].data.push(linkObj[key]);
+                          } else {
+                              option.series[0].data.push(linkObj[key]);
+                          }
+                      }
+                  }
+                  if(data.data[i].statType === 5) {
+                      var linksObj = data.data[0].result.link;
+                      for (var keys in linksObj) {
+                          if(option.series[1].data.length >8) {
+                              option.series[1].data.shift();
+                              option.series[1].data.push(linksObj[keys]);
+                          } else {
+                              option.series[1].data.push(linksObj[keys]);
+                          }
+                      }
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+
+    },2000)
+}
+// 挖掘poi数据 NR
+function digPoiHistogram(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: false },
+                dataView: { show: false, readOnly: false },
+                magicType: { show: false, type: ['line', 'bar'] },
+                restore: { show: false },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        legend: {
+            orient : 'horizontal',
+            x : 'center',
+            y:'bottom',
+            data:['接入量','处理量']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: [formateTime()]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '100%',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                type: 'value',
+                name: '数量',
+                axisLabel: {
+                    formatter: '{value}元'
+                }
+            }
+        ],
+        series : [
+            {
+                name:'总量',
+                type:'bar',
+                itemStyle:{
+                    normal:{color:'#0099FF'}
+                },
+                data:[0]
+            },
+            {
+                name: '处理量',
+                type: 'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{color:'#C06410'}
+                },
+                data:[0]
+            }
+        ]
+    };
+    setInterval(function () {
+        var param = {
+            "statType": [4,5],
+            "objType": 2,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              for (var i = 0, len =data.data.length; i<len; i++) {
+                  if (data.data[i].statType === 4) {
+                      var poiObj = data.data[0].result.poi;
+                      for (var key in poiObj) {
+                          if(option.xAxis[0].data.length > 8) {
+                              option.xAxis[0].data.shift();
+                              option.xAxis[0].data.push(key);
+                          } else {
+                              option.xAxis[0].data.push(key);
+                          }
+                          if(option.series[0].data.length >8) {
+                              option.series[0].data.shift();
+                              option.series[0].data.push(poiObj[key]);
+                          } else {
+                              option.series[0].data.push(poiObj[key]);
+                          }
+                      }
+                  }
+                  if(data.data[i].statType === 5) {
+                      var poisObj = data.data[0].result.poi;
+                      for (var keys in poisObj) {
+                          if(option.series[1].data.length >8) {
+                              option.series[1].data.shift();
+                              option.series[1].data.push(poisObj[keys]);
+                          } else {
+                              option.series[1].data.push(poisObj[keys]);
+                          }
+                      }
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+
+    },2000)
+}
+function timeEventHistogram(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = {
+        backgroundColor: '#fff',
+        tooltip: {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: false },
+                dataView: { show: false, readOnly: false },
+                magicType: { show: false, type: ['line', 'bar'] },
+                restore: { show: false },
+                saveAsImage: { show: true }
+            }
+        },
+        calculable: true,
+        legend: {
+            orient : 'horizontal',
+            x : 'center',
+            y:'bottom',
+            data:['接入量','处理量']
+        },
+        xAxis: [
+            {
+                type: 'category',
+                data: [formateTime()]
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                name: '100%',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            {
+                type: 'value',
+                name: '数量',
+                axisLabel: {
+                    formatter: '{value}元'
+                }
+            }
+        ],
+        series : [
+            {
+                name:'总量',
+                type:'bar',
+                itemStyle:{
+                    normal:{color:'#0099FF'}
+                },
+                data:[0]
+            },
+            {
+                name: '处理量',
+                type: 'line',
+                yAxisIndex: 1,
+                itemStyle:{
+                    normal:{color:'#C06410'}
+                },
+                data:[0]
+            }
+        ]
+    };
+    setInterval(function () {
+        var param = {
+            "statType": [4,5],
+            "objType": 2,
+            "second": parseInt(new Date().getTime()/1000),
+            "interval": 2,
+        };
+        $.get('http://fs.navinfo.com/autoadas/stat/second?parameter=' + JSON.stringify(param),
+          function (data) {
+              for (var i = 0, len =data.data.length; i<len; i++) {
+                  if (data.data[i].statType === 4) {
+                      var poiObj = data.data[0].result.poi;
+                      for (var key in poiObj) {
+                          if(option.xAxis[0].data.length > 8) {
+                              option.xAxis[0].data.shift();
+                              option.xAxis[0].data.push(key);
+                          } else {
+                              option.xAxis[0].data.push(key);
+                          }
+                          if(option.series[0].data.length >8) {
+                              option.series[0].data.shift();
+                              option.series[0].data.push(poiObj[key]);
+                          } else {
+                              option.series[0].data.push(poiObj[key]);
+                          }
+                      }
+                  }
+                  if(data.data[i].statType === 5) {
+                      var poisObj = data.data[0].result.poi;
+                      for (var keys in poisObj) {
+                          if(option.series[1].data.length >8) {
+                              option.series[1].data.shift();
+                              option.series[1].data.push(poisObj[keys]);
+                          } else {
+                              option.series[1].data.push(poisObj[keys]);
+                          }
+                      }
+                  }
+              }
+              myChart.setOption(option, true);
+          });
+
+
+    },2000)
+}
+function formateTime() {
+    var date = new Date();
+    var year = date.getFullYear().toString();
+    var month = (date.getMonth() + 1).toString();
+    var day = date.getDay() > 10 ? date.getDay().toString() : '0' + date.getDay();
+    var hour = date.getHours().toString();
+    var minutes = date.getMinutes().toString();
+    var seconds = date.getSeconds().toString();
+    return year + month + day + hour + minutes + seconds;
+}
+
+function instrumentPanel(id) {
+    var dom = document.getElementById(id);
+    var myChart = echarts.init(dom);
+    var option = {
+        tooltip : {
+            formatter: "{a} <br/>{c} {b}"
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                restore: {show: true},
+                saveAsImage: {show: true}
+            }
+        },
+        series : [
+            {
+                name: 'POI',
+                type: 'gauge',
+                z: 3,
+                min: 0,
+                max: 220,
+                splitNumber: 11,
+                radius: '50%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                title : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder',
+                        fontSize: 20,
+                        fontStyle: 'italic'
+                    }
+                },
+                detail : {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 40, name: '个/秒'}]
+            },
+            {
+                name: '转速',
+                type: 'gauge',
+                center: ['20%', '55%'],    // 默认全局居中
+                radius: '50%',
+                min:0,
+                max:1000,
+                splitNumber:200,
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length:12,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length:20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer: {
+                    width:5
+                },
+                title: {
+                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                },
+                detail: {
+                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                        fontWeight: 'bolder'
+                    }
+                },
+                data:[{value: 100, name: '个/个'}]
+            },
+            {
+                name: '油表',
+                type: 'gauge',
+                center: ['77%', '50%'],    // 默认全局居中
+                radius: '25%',
+                min: 0,
+                max: 2,
+                startAngle: 135,
+                endAngle: 45,
+                splitNumber: 2,
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    splitNumber: 5,
+                    length: 10,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                axisLabel: {
+                    formatter:function(v){
+                        switch (v + '') {
+                            case '0' : return 'E';
+                            case '1' : return 'Gas';
+                            case '2' : return 'F';
+                        }
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 15,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer: {
+                    width:2
+                },
+                title : {
+                    show: false
+                },
+                detail : {
+                    show: false
+                },
+                data:[{value: 0.5, name: '个/秒'}]
+            },
+            {
+                name: '水表',
+                type: 'gauge',
+                center : ['77%', '50%'],    // 默认全局居中
+                radius : '25%',
+                min: 0,
+                max: 2,
+                startAngle: 315,
+                endAngle: 225,
+                splitNumber: 2,
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    show: false
+                },
+                axisLabel: {
+                    formatter:function(v){
+                        switch (v + '') {
+                            case '0' : return 'H';
+                            case '1' : return 'Water';
+                            case '2' : return 'C';
+                        }
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 15,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer: {
+                    width:2
+                },
+                title: {
+                    show: false
+                },
+                detail: {
+                    show: false
+                },
+                data:[{value: 0.5, name: '个/秒'}]
+            }
+        ]
+    };
+
+    setInterval(function (){
+        option.series[0].data[0].value = (Math.random()*100).toFixed(2) - 0;
+        option.series[1].data[0].value = (Math.random()*100).toFixed(2) - 0;
+        option.series[2].data[0].value = (Math.random()*2).toFixed(2) - 0;
+        option.series[3].data[0].value = (Math.random()*2).toFixed(2) - 0;
+        myChart.setOption(option,true);
+    },2000);
 }
