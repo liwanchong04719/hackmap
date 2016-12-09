@@ -1,13 +1,12 @@
-//初始化地图并加载图层
+//初始化地图并加载图层116.10202935,39.766424424   116.67517252,39.664857855  116.57969618,39.743630371
 
 $(document).ready(
   function () {
 
-    //116.37452,39.88642
     $("#toggle").click(function () {
       $("#layersContent").toggle();
     });
-    var map = L.map('map',{zoomControl:false}).setView([39.88642, 116.37452], 16);
+    var map = L.map('map',{zoomControl:false,minZoom:15}).setView([40.0,116.25], 16);
 
     var bound = L.latLngBounds(L.latLng(40.0,116.25),L.latLng(40.083333333333336,116.375));
 
@@ -29,17 +28,17 @@ $(document).ready(
     var animationLayer = null;
     var animationdataSet = null;
     var options = {
-      fillStyle: 'rgba(255, 250, 250, 0.2)',
+      fillStyle: 'red',
       coordType: 'bd09mc',
       globalCompositeOperation: "lighter",
       size: 3,
       animation: {
         stepsRange: {
           start: 0,
-          end: 150
+          end: 550
         },
         trails: 5,
-        duration: 15,
+        duration: 5,
       },
       draw: 'simple',
       zIndex:41,
@@ -54,54 +53,66 @@ $(document).ready(
 
     var requestBound = map.getBounds();
 
-    $.post('http://172.23.125.124:8017/autoadas/track.json',JSON.stringify({"ak":"E485214565fetch087acde70","bound":[[requestBound.getNorthWest().lng,requestBound.getNorthWest().lat],[requestBound.getSouthEast().lng,requestBound.getSouthEast().lat]]}),function () {
-      console.log('-------------')
-    },'json');
-
-
-    Application.Util.ajaxConstruct('http://fs.navinfo.com/smap/autoadas/track.json',"POST",
-      JSON.stringify({"ak":"E485214565fetch087acde70","bound":[[requestBound.getNorthWest().lng,requestBound.getNorthWest().lat],[requestBound.getSouthEast().lng,requestBound.getSouthEast().lat]]}),"JSON",
-        function (data) {
-
-    },function (err) {
-      console.log('查询服务出错！')
+    map.on('moveend',function () {
+      requestBound = map.getBounds();
     })
 
 
-    $.get('data/beijing-link', function (rs) {
-      var data = [];
-      var timeData = [];
-      rs = JSON.parse(rs);
-      console.log(rs.length);
-      for (var i = 0; i < rs.length; i++) {
-        var item = rs[i].geometry.coordinates;
-        var coordinates = [];
-        for (j = 0; j < item.length; j += 2) {
-          var co = item[j]
-          coordinates.push(co);
-          timeData.push({
+    //每隔5秒钟刷新一次轨迹动画信息
+    getanimationData()
+    setInterval(getanimationData,5000)
+    //每隔5秒刷新adaslink数据
+    //setInterval(function(){layerController.getLayerById('adasLink').redraw()},5000);
+
+
+    //调用统计
+    getStaticForAccess();
+    //四种要素总数
+    getStaticTotal();
+
+    function getanimationData () {
+      $.post('http://fs.navinfo.com/smap/autoadas/track.json',JSON.stringify({"ak":"E485214565fetch087acde70","bound":[[requestBound.getNorthWest().lng,requestBound.getNorthWest().lat],[requestBound.getSouthEast().lng,requestBound.getSouthEast().lat]]}),function (data) {
+        var rs =data.data.track
+        var data = [];
+        var timeData = [];
+        //rs = JSON.parse(rs);
+        console.log(rs.length);
+        for (var i = 0; i < rs.length; i++) {
+          var item = rs[i].geometry.coordinates;
+          var coordinates = [];
+          for (j = 0; j < item.length; j += 2) {
+            var co = item[j]
+            coordinates.push(co);
+            timeData.push({
+              geometry: {
+                type: 'Point',
+                coordinates: item[j]
+              },
+              count: 1,
+              time: 2 * j
+            });
+          }
+          data.push({
             geometry: {
-              type: 'Point',
-              coordinates: item[j]
+              type: 'LineString',
+              coordinates: coordinates
             },
-            count: 1,
-            time: 2 * j
+            count: 30 * Math.random()
           });
+
         }
-        data.push({
-          geometry: {
-            type: 'LineString',
-            coordinates: coordinates
-          },
-          count: 30 * Math.random()
-        });
+        if(animationLayer!=null){
+          animationLayer.onRemove();
+          animationLayer = null;
+        }
+        timeData = timeData.splice(0, timeData.length - 1);
+        animationdataSet = new mapv.DataSet(timeData);
+        animationLayer = new mapv.leafletMapLayer(map, animationdataSet, options);
 
-      }
+      },'json');
+    }
 
-      timeData = timeData.splice(0, timeData.length - 1);
-      animationdataSet = new mapv.DataSet(timeData);
-      animationLayer = new mapv.leafletMapLayer(map, animationdataSet, options);
-    });
+
 
     var layers = layerController.layers.concat([{ options: { id: 'animation', visible: true, name: "线轨迹" } }])
     //生成图层列表
@@ -129,6 +140,7 @@ $(document).ready(
       }
     );
   });
+
 
 
 //查询MS生成量
@@ -242,8 +254,6 @@ function initBarChart(id) {
 
 
 function mscountline(id) {
-
-
   var dom = document.getElementById(id);
   var myChart = echarts.init(dom);
   var app = {};
@@ -327,4 +337,18 @@ function changeDivShow(type) {
         initBarChart("barChartOfNR");
     }
 
+}
+
+
+function getStaticForAccess() {
+  $.post('http://fs.navinfo.com/smap/autoadas/s_day.json',JSON.stringify({"ak":"E485214565fetch087acde70","statType":"event","day":new Date().getFullYear()+""+(new Date().getMonth()+1)+new Date().getDay()}),function (data) {
+    console.log('-------------')
+  },'json');
+}
+
+
+function getStaticTotal() {
+  $.post('http://fs.navinfo.com/smap/autoadas/total.json',JSON.stringify({"ak":"E485214565fetch087acde70"}),function (data) {
+    console.log('-------------')
+  },'json');
 }
