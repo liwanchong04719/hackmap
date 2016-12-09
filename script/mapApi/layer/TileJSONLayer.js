@@ -258,7 +258,8 @@ fastmap.mapApi.TileJSON = L.TileLayer.Canvas.extend({
 
      parseToPixel:function(data){
          var results = [];
-         var geos = data.linkinfo ||data.rdlink;
+         var geos = data.linkinfo ;
+         var rdlink = data.rdlink;
          var event = data.event;
          var poiinfo = data.poiinfo;
 
@@ -275,11 +276,29 @@ fastmap.mapApi.TileJSON = L.TileLayer.Canvas.extend({
                      pixels.push([ co[jj][0], co[jj][1]]);
                  }
 
-                 results.push({g:pixels,t:4})
+                 results.push({g:pixels,t:4,m:{a:1}})
 
 
              }
          }
+
+         if(rdlink){
+             for(var i=0,len =rdlink.length;i<len;i++){
+
+                 var co = rdlink[i].geometry.coordinates
+
+                 var pixels= [];
+                 for(var jj =0,jlength=co.length;jj<jlength;jj++){
+
+                     pixels.push([ co[jj][0], co[jj][1]]);
+                 }
+
+                 results.push({g:pixels,t:4,m:{a:2}})
+
+
+             }
+         }
+
 
          if(linkadas){
              for(var i=0,len =linkadas.length;i<len;i++){
@@ -292,7 +311,7 @@ fastmap.mapApi.TileJSON = L.TileLayer.Canvas.extend({
                      pixels.push([ co[jj][0], co[jj][1]]);
                  }
 
-                 results.push({g:pixels,t:4})
+                 results.push({g:pixels,t:4,m:{a:3}})
 
 
              }

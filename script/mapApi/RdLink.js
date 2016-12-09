@@ -73,7 +73,7 @@ fastmap.uikit.canvasFeature.RdLink = fastmap.uikit.canvasFeature.Feature.extend(
             compositeSymbol.symbols.push(subSymbol);
         }
         this.properties['symbol'] = compositeSymbol;
-        this.properties['style']['strokeColor'] = RD_LINK_Colors[6];
+        this.properties['style']['strokeColor'] = RD_LINK_Colors[parseInt(data.m.a)];
         this.properties['style']['strokeWidth'] = 1;
         this.properties['style']['strokeOpacity'] = 1;
     },
