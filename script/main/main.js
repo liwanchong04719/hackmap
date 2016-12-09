@@ -235,7 +235,7 @@ function initBarChart(id) {
         type: 'value',
         name: '单价',
         axisLabel: {
-          formatter: '{value}元'
+          formatter: '{value}个'
         }
       }
     ],
@@ -571,7 +571,7 @@ function originalTrackHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -686,7 +686,7 @@ function didiHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -800,7 +800,7 @@ function absSensorHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -914,7 +914,7 @@ function fireSensorHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -1028,7 +1028,7 @@ function segmentHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -1142,7 +1142,7 @@ function digPoiHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -1256,7 +1256,7 @@ function skipLandHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
@@ -1370,7 +1370,7 @@ function parkOfNRHistogram(id) {
                 type: 'value',
                 name: '数量',
                 axisLabel: {
-                    formatter: '{value}元'
+                    formatter: '{value}个'
                 }
             }
         ],
