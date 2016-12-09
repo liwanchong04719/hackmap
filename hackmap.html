@@ -153,7 +153,8 @@
                                     </li>
                                     <li ><a href="#ios" data-toggle="tab" >ADAS原始轨迹点数</a></li>
                                     <li ><a href="#jmeter" data-toggle="tab">滴滴订单数据</a></li>
-                                    <li ><a href="#ejb" data-toggle="tab">sensor信息数</a></li>
+                                    <li ><a href="#ejb" data-toggle="tab">Abs sensor信息数</a></li>
+                                    <li ><a href="#sensor" data-toggle="tab">点火系统sensor信息数</a></li>
                                 </ul>
 
                                 <div id="myTabContent" class="tab-content" style="height: 89%">
@@ -175,6 +176,14 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="ejb">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="absSensorChart"></div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="sensor">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="sensorChart"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -185,7 +194,8 @@
                                     </li>
                                     <li><a href="#segmentOfNR" data-toggle="tab">ADAS截取轨迹段数</a></li>
                                     <li><a href="#digOfNR" data-toggle="tab">挖掘poi数</a></li>
-                                    <li><a href="#timeEventOfNR" data-toggle="tab">实时事件数</a></li>
+                                    <li><a href="#skipLandOfNR" data-toggle="tab">易滑路面</a></li>
+                                    <li><a href="#parkOfNR" data-toggle="tab">停车位</a></li>
                                 </ul>
                                 <div id="myTabContentOfNR" class="tab-content" style="height: 89%">
                                     <div class="tab-pane fade in active" id="quantityOfNR" style="height: 100%">
@@ -200,9 +210,14 @@
                                             <div style="height: 500px;width:900px;" id="digChart"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="timeEventOfNR">
+                                    <div class="tab-pane fade" id="skipLandOfNR">
                                         <div style="height: 100%">
-                                            <div style="height: 500px;width:900px;" id="timeEventChart"></div>
+                                            <div style="height: 500px;width:900px;" id="skipLandChart"></div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="parkOfNR">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="parkOfNRChart"></div>
                                         </div>
                                     </div>
                                 </div>
