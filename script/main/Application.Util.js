@@ -30,7 +30,6 @@ Application.Util.ajaxConstruct = function (url, type, data, dataType, successFuc
             'Accept' : 'application/json',
             'Content-Type' : accept
         },
-
         url: url,
         type: type,
         data: data,

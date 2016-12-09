@@ -148,12 +148,12 @@
                             <div id="msDiv" style="height: 90%">
 
                                 <ul id="myTab" class="nav nav-tabs">
-                                    <li class="active"><a href="#home" data-toggle="tab">
+                                    <li class="active" ><a href="#home" data-toggle="tab">
                                         MS生成量</a>
                                     </li>
-                                    <li><a href="#ios" data-toggle="tab">ADAS原始轨迹点数</a></li>
-                                    <li><a href="#jmeter" data-toggle="tab">滴滴订单数据</a></li>
-                                    <li><a href="#ejb" data-toggle="tab">sensor信息数</a></li>
+                                    <li ><a href="#ios" data-toggle="tab" >ADAS原始轨迹点数</a></li>
+                                    <li ><a href="#jmeter" data-toggle="tab">滴滴订单数据</a></li>
+                                    <li ><a href="#ejb" data-toggle="tab">sensor信息数</a></li>
                                 </ul>
 
                                 <div id="myTabContent" class="tab-content" style="height: 89%">
@@ -164,9 +164,15 @@
                                             <div class="container" style="width: 100%; height: 40%"  id="linechartcontainer"></div>
                                         </div>
                                     </div>
-                                    <div class="tab-pane fade" id="ios">
+                                    <div class="tab-pane fade" style="height: 100%" id="ios">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="originalTrack"></div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="jmeter">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="didiChart"></div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="ejb">
                                     </div>
@@ -185,12 +191,19 @@
                                     <div class="tab-pane fade in active" id="quantityOfNR" style="height: 100%">
                                     </div>
                                     <div class="tab-pane fade" id="segmentOfNR" style="height: 100%">
-                                        <div style="height: 100%" id="barChartOfNR">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="segmentChart"></div>
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="digOfNR">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="digChart"></div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="timeEventOfNR">
+                                        <div style="height: 100%">
+                                            <div style="height: 500px;width:900px;" id="timeEventChart"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
